@@ -1,0 +1,37 @@
+* {
+    box-sizing: border-box;
+}
+
+body,
+html {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+    height: 100vh;
+}
+
+#container {
+    position: relative;
+    width: 800px;
+    height: 400px;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+#player,
+.enemy {
+    position: absolute;
+    display: flex;
+    flex-wrap: wrap;
+    /* background-color: black; */
+}
+
+.enemy {
+    background-color: red;
+}
+
+.platform {
+    position: absolute;
+    background-color: #555;
+}
