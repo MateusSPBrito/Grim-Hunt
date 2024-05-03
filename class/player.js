@@ -36,8 +36,8 @@ class Player {
                         this.jumpsRemaining--
                         this.actions.jump = true
                         this.jumpSpeed = -5
+                        this._setAppearance()
                     }
-                    if (this.jumpsRemaining == 1) this._setAppearance()
                     break;
 
                 case 'ArrowLeft':
@@ -72,10 +72,10 @@ class Player {
 
     _setAppearance(i = 0, oldAction = null) {
 
+        // console.log('oi')
+
         const { frame, action } = this._getAppearanceFrameAndAction(i)
         if (!(frame && action) || (oldAction && oldAction !== action)) return
-
-        console.log(action)
 
         this.element.innerHTML = ''
         for (let colors of frame) {
@@ -100,13 +100,26 @@ class Player {
 
         if (this.actions.jump) {
             action = 'jump'
-            if (this.actions.left && !this.actions.right) frame = walkLeft[0]
-            else if (!this.actions.left && this.actions.right) frame = walkRight[0]
-            else if (this.jumpSpeed > 0) frame = drop
+
+            if (this.jumpSpeed < 0) {
+                if (this.actions.left && !this.actions.right) frame = riseLeft
+                else if (!this.actions.left && this.actions.right) frame = riseRight
+                else frame = rise
+            } 
+            else {
+                if (this.actions.left && !this.actions.right) frame = dropLeft
+                else if (!this.actions.left && this.actions.right) frame = dropRight
+                else frame = drop
+            }
+
+            // if (this.actions.left && !this.actions.right) frame = dropLeft
+            // else if (!this.actions.left && this.actions.right) frame = walkRight[0]
+            // else if (this.jumpSpeed < 0) frame = rise
+            // else frame = drop
         }
         else if (this.actions.left === this.actions.right) {
             action = 'stop'
-            frame = stop_
+            frame = stopped
         }
         else {
             action = this.actions.left ? 'left' : 'right'
@@ -137,28 +150,31 @@ class Player {
 
     _jump() {
         const checkCollision = this._checkCollision()
+        const oldJumpSpeed = this.jumpSpeed
 
         if (!checkCollision) {
             this.y += this.jumpSpeed
             this.jumpSpeed += 0.2
             this.element.style.top = `${this.y}px`
-            return
         }
 
-        if (this.jumpSpeed > 0) { //caindo
+        else if (this.jumpSpeed > 0) { //caindo
             this.y = checkCollision.y - this.height
             this.jumpSpeed = 0
             this.actions.jump = false
             this.jumpsRemaining = 2
             this.element.style.top = `${this.y}px`
-            return
         }
         else if (this.jumpSpeed < 0) { // subindo
             this.jumpSpeed = 0
             this.y = checkCollision.y + checkCollision.height
             this.element.style.top = `${this.y}px`
         }
-        // else this._setAppearance()
+
+        if (oldJumpSpeed < 0 && this.jumpSpeed >= 0) this._setAppearance()
+        else if (oldJumpSpeed > 0 && this.jumpSpeed === 0 && oldJumpSpeed - this.jumpSpeed > 0.5)
+            this._setAppearance()
+
     }
 
     _checkCollision(command = 'jump') {
@@ -184,6 +200,8 @@ class Player {
                 this.x + this.width > plataform.x
             ) return { height: plataform.height, y: plataform.y }
         }
+
+        return false
     }
 
     _commands() {
