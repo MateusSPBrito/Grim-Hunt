@@ -23,7 +23,25 @@ class Enemy {
         this.element.style.height = `${this.height}px`
         container.appendChild(this.element);
 
+        this._setAppearance()
         this._walk()
+    }
+
+    _setAppearance(i = 0, oldAction = null) {
+        const frame = stopSkull
+
+        this.element.innerHTML = ''
+        for (let colors of frame) {
+            for (let color of colors) {
+                let pixel = document.createElement('div')
+                pixel.setAttribute('class', 'pixel')
+                if (color != null) pixel.style.backgroundColor = `#${color}`
+                else pixel.style.backgroundColor = `transparent`
+                pixel.style.height = `${this.height / 20}px`
+                pixel.style.width = `${this.height / 20}px`
+                this.element.appendChild(pixel)
+            }
+        }
     }
 
     _walk() {

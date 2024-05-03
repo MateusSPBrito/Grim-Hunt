@@ -15,7 +15,7 @@ html {
     position: relative;
     width: 800px;
     height: 400px;
-    background-color: #fff;
+    background-color: #894b4b;
     overflow: hidden;
 }
 
@@ -25,10 +25,6 @@ html {
     display: flex;
     flex-wrap: wrap;
     /* background-color: black; */
-}
-
-.enemy {
-    background-color: red;
 }
 
 .platform {

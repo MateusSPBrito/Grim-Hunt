@@ -111,12 +111,8 @@ class Player {
                 else if (!this.actions.left && this.actions.right) frame = dropRight
                 else frame = drop
             }
-
-            // if (this.actions.left && !this.actions.right) frame = dropLeft
-            // else if (!this.actions.left && this.actions.right) frame = walkRight[0]
-            // else if (this.jumpSpeed < 0) frame = rise
-            // else frame = drop
         }
+        
         else if (this.actions.left === this.actions.right) {
             action = 'stop'
             frame = stopped
