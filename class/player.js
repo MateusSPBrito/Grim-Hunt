@@ -1,5 +1,6 @@
-class Player {
+class Player extends Entity {
     constructor(container, plataforms) {
+        super(350, 350, 50, container, plataforms)
         this.x = 350;
         this.y = 350;
         this.speed = 0;
@@ -11,20 +12,9 @@ class Player {
         this.height = 50
         this.plataforms = plataforms
 
-        this._createElement(container)
-    }
-
-    _createElement(container) {
-        this.element = document.createElement('div');
-        this.element.id = 'player';
-        this.element.style.left = `${this.x}px`;
-        this.element.style.top = `${this.y}px`;
-        this.element.style.width = `${this.width}px`
-        this.element.style.height = `${this.height}px`
-        container.appendChild(this.element);
-        this.appearance
-        this._setAppearance()
+        super._createElement(container)
         this._createListener()
+        this._setAppearance()
     }
 
     _createListener() {
@@ -72,24 +62,10 @@ class Player {
 
     _setAppearance(i = 0, oldAction = null) {
 
-        // console.log('oi')
-
         const { frame, action } = this._getAppearanceFrameAndAction(i)
         if (!(frame && action) || (oldAction && oldAction !== action)) return
 
-        this.element.innerHTML = ''
-        for (let colors of frame) {
-            for (let color of colors) {
-                let pixel = document.createElement('div')
-                pixel.setAttribute('class', 'pixel')
-                if (color != null) pixel.style.backgroundColor = `#${color}`
-                else pixel.style.backgroundColor = `transparent`
-                pixel.style.height = `${this.height / 20}px`
-                pixel.style.width = `${this.height / 20}px`
-                this.element.appendChild(pixel)
-            }
-        }
-
+        super._setAppearance(this.element, frame)
 
         if (action == 'right' || action == 'left') setTimeout(() => { this._setAppearance(i == 0 ? 1 : 0, action) }, 200);
     }
@@ -105,14 +81,14 @@ class Player {
                 if (this.actions.left && !this.actions.right) frame = riseLeft
                 else if (!this.actions.left && this.actions.right) frame = riseRight
                 else frame = rise
-            } 
+            }
             else {
                 if (this.actions.left && !this.actions.right) frame = dropLeft
                 else if (!this.actions.left && this.actions.right) frame = dropRight
                 else frame = drop
             }
         }
-        
+
         else if (this.actions.left === this.actions.right) {
             action = 'stop'
             frame = stopped

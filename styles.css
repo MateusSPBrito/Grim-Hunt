@@ -19,12 +19,24 @@ html {
     overflow: hidden;
 }
 
-#player,
-.enemy {
+.hearts {
+    display: flex;
     position: absolute;
+}
+
+.icon {
+    background-color: #fff;
+}
+
+.entity,
+.icon {
     display: flex;
     flex-wrap: wrap;
-    /* background-color: black; */
+    justify-content: center;
+}
+
+.entity {
+    position: absolute;
 }
 
 .platform {

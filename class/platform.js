@@ -1,7 +1,7 @@
 class Platform {
     constructor(x, y, width, height, container) {
         this.x = x
-        this.y = y
+        this.y = 400 - y - height
         this.width = width
         this.height = height
         this.element

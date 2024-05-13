@@ -1,50 +1,29 @@
-class Enemy {
+class Enemy extends Entity {
     constructor(x, y, size, container, plataforms) {
+        super(x, y, 60, container, plataforms, 3)
         this.x = x;
-        this.y = y;
-        if (this.x <= 350) this.speed = 1
-        else this.speed = -1
+        this.y = 400 - size - y;
+        this.speed = 0
         this.element
         this.width = size
         this.height = size
         this.plataforms = plataforms
 
-        this._createElement(container)
-    }
-
-    _createElement(container) {
-        if (this._checkCollision(true)) return
-
-        this.element = document.createElement('div');
-        this.element.classList = 'enemy';
-        this.element.style.left = `${this.x}px`;
-        this.element.style.top = `${this.y}px`;
-        this.element.style.width = `${this.width}px`
-        this.element.style.height = `${this.height}px`
-        container.appendChild(this.element);
-
-        this._setAppearance()
+        super._createElement(container)
+        this._setAppearance(container)
         this._walk()
     }
 
-    _setAppearance(i = 0, oldAction = null) {
-        const frame = stopSkull
+    _setAppearance(container,i = 0) {
+        const frame = stopSkull[i]
 
-        this.element.innerHTML = ''
-        for (let colors of frame) {
-            for (let color of colors) {
-                let pixel = document.createElement('div')
-                pixel.setAttribute('class', 'pixel')
-                if (color != null) pixel.style.backgroundColor = `#${color}`
-                else pixel.style.backgroundColor = `transparent`
-                pixel.style.height = `${this.height / 20}px`
-                pixel.style.width = `${this.height / 20}px`
-                this.element.appendChild(pixel)
-            }
-        }
+        super._setAppearance(this.element, frame)
+
+        setTimeout(() => { this._setAppearance(container, i == 0 ? 1 : 0) }, i == 0 ? 1500 : 750);
     }
 
     _walk() {
+        if (this.speed == 0) this.speed = 1
         while (1) {
             const checkCollision = this._checkCollision()
 
