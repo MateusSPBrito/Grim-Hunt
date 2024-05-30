@@ -1,17 +1,15 @@
 class Entity {
-    constructor(x, y, size, container, plataforms, hearts = 0) {
+    constructor(x, y, size, container, plataforms) {
         this.x = x;
         this.y = 400 - size - y;
-        this.speed = 0
+        this.speedX = 0
         this.element
         this.width = size
         this.height = size
         this.plataforms = plataforms
-        this.hearts = hearts
-        this.heartsContainer
     }
 
-    _createElement(container) {
+    createEntity(container) {
         this.element = document.createElement('div');
         this.element.classList = 'entity';
         this.element.style.left = `${this.x}px`;
@@ -21,8 +19,8 @@ class Entity {
         container.appendChild(this.element);
     }
 
-    _setAppearance(element, frame = heartIcon) {
-        element.innerHTML = ''
+    setSkin(frame = heartIcon) {
+        this.element.innerHTML = ''
         for (let colors of frame) {
             for (let color of colors) {
                 let pixel = document.createElement('div')
@@ -31,8 +29,40 @@ class Entity {
                 else pixel.style.backgroundColor = `transparent`
                 pixel.style.height = `${this.height / 20}px`
                 pixel.style.width = `${this.height / 20}px`
-                element.appendChild(pixel)
+                this.element.appendChild(pixel)
             }
         }
+    }
+
+    gravity(){
+
+    }
+
+    walk(direction, speed) {
+        const { collision, x } = this.checkHorizontalCollision(direction, speed)
+        if (collision) this.x = x
+        else this.x += direction == 'right' ? speed : -speed
+        this.element.style.left = `${this.x}px`
+        return collision
+    }
+
+    checkHorizontalCollision(direction, speed) {
+        const nextPosition = this.x + (direction == 'right' ? speed : -speed)
+
+        if (nextPosition < 0) return { collision: true, x: 0 }
+        if (nextPosition > 800 - this.width) return { collision: true, x: 800 - this.width }
+
+        for (const plataform of this.plataforms) {
+            if (!(this.y + this.height > plataform.y && this.y < plataform.y + plataform.height)) continue
+
+            if (nextPosition > plataform.x - this.width && nextPosition < plataform.x + plataform.width) {
+                console.log(nextPosition, plataform)
+                if (direction == 'left') return { collision: true, x: plataform.x + plataform.width }
+                return { collision: true, x: plataform.x - this.width }
+
+            }
+        }
+
+        return { collision: false }
     }
 }

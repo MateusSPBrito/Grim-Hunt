@@ -5,10 +5,10 @@ class Platform {
         this.width = width
         this.height = height
         this.element
-        this._createElement(container)
+        this.createElement(container)
     }
 
-    _createElement(container) {
+    createElement(container) {
         this.element = document.createElement('div');
         this.element.classList = 'platform';
         this.element.style.left = `${this.x}px`;

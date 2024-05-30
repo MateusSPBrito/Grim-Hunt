@@ -1,6 +1,6 @@
 class Player extends Entity {
     constructor(container, plataforms) {
-        super(350, 350, 50, container, plataforms)
+        super(350, 350, 50, container)
         this.x = 350;
         this.y = 350;
         this.speed = 0;
@@ -12,12 +12,12 @@ class Player extends Entity {
         this.height = 50
         this.plataforms = plataforms
 
-        super._createElement(container)
-        this._createListener()
-        this._setAppearance()
+        super.createEntity(container)
+        this.createListener()
+        this.setSkin()
     }
 
-    _createListener() {
+    createListener() {
         document.addEventListener('keydown', (event) => {
             switch (event.key) {
 
@@ -26,20 +26,20 @@ class Player extends Entity {
                         this.jumpsRemaining--
                         this.actions.jump = true
                         this.jumpSpeed = -5
-                        this._setAppearance()
+                        this.setSkin()
                     }
                     break;
 
                 case 'ArrowLeft':
                     if (this.actions.left) break
                     this.actions.left = true
-                    this._setAppearance()
+                    this.setSkin()
                     break;
 
                 case 'ArrowRight':
                     if (this.actions.right) break
                     this.actions.right = true
-                    this._setAppearance()
+                    this.setSkin()
                     break;
             }
         });
@@ -48,29 +48,29 @@ class Player extends Entity {
             switch (event.key) {
                 case 'ArrowLeft':
                     this.actions.left = false
-                    this._setAppearance()
+                    this.setSkin()
                     break
                 case 'ArrowRight':
                     this.actions.right = false
-                    this._setAppearance()
+                    this.setSkin()
                     break
             }
         });
 
-        this._commands()
+        this.commands()
     }
 
-    _setAppearance(i = 0, oldAction = null) {
+    setSkin(i = 0, oldAction = null) {
 
-        const { frame, action } = this._getAppearanceFrameAndAction(i)
+        const { frame, action } = this.getAppearanceFrameAndAction(i)
         if (!(frame && action) || (oldAction && oldAction !== action)) return
 
-        super._setAppearance(this.element, frame)
+        super.setSkin(frame)
 
-        if (action == 'right' || action == 'left') setTimeout(() => { this._setAppearance(i == 0 ? 1 : 0, action) }, 200);
+        if (action == 'right' || action == 'left') setTimeout(() => { this.setSkin(i == 0 ? 1 : 0, action) }, 200);
     }
 
-    _getAppearanceFrameAndAction(i) {
+    getAppearanceFrameAndAction(i) {
         let frame
         let action
 
@@ -100,14 +100,14 @@ class Player extends Entity {
         return { frame, action }
     }
 
-    _walk() {
+    walk() {
         this.speed = 0
         if (this.actions.left && !this.actions.right) this.speed = -3;
         else if (this.actions.right && !this.actions.left) this.speed = 3;
 
         while (1) {
             const command = this.speed < 0 ? 'left' : this.speed > 0 ? 'right' : null
-            const checkCollision = command === null ? false : this._checkCollision(command)
+            const checkCollision = command === null ? false : this.checkCollision(command)
 
             if (!checkCollision) break
 
@@ -120,8 +120,8 @@ class Player extends Entity {
         this.element.style.left = `${this.x}px`
     }
 
-    _jump() {
-        const checkCollision = this._checkCollision()
+    jump() {
+        const checkCollision = this.checkCollision()
         const oldJumpSpeed = this.jumpSpeed
 
         if (!checkCollision) {
@@ -143,13 +143,13 @@ class Player extends Entity {
             this.element.style.top = `${this.y}px`
         }
 
-        if (oldJumpSpeed < 0 && this.jumpSpeed >= 0) this._setAppearance()
+        if (oldJumpSpeed < 0 && this.jumpSpeed >= 0) this.setSkin()
         else if (oldJumpSpeed > 0 && this.jumpSpeed === 0 && oldJumpSpeed - this.jumpSpeed > 0.5)
-            this._setAppearance()
+            this.setSkin()
 
     }
 
-    _checkCollision(command = 'jump') {
+    checkCollision(command = 'jump') {
         if (command != 'jump' && (this.x + this.speed < 0 || this.x + this.speed > 800 - this.width)) return true
 
         if (command == 'jump' && this.y + this.jumpSpeed >= 350) return { height: 0, y: 400 }
@@ -176,9 +176,9 @@ class Player extends Entity {
         return false
     }
 
-    _commands() {
-        this._walk()
-        this._jump()
-        requestAnimationFrame(() => this._commands())
+    commands() {
+        this.walk()
+        this.jump()
+        requestAnimationFrame(() => this.commands())
     }
 }
