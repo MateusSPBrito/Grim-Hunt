@@ -4,11 +4,12 @@ class Enemy extends Entity {
         this.y = 400 - size - y;
         this.speed = 0
         this.plataforms = plataforms
+        this.direction = 'right'
 
         super.createEntity(container)
         this.setSkin(container)
 
-        this.walk()
+        this.start()
     }
 
     setSkin(container, i = 0) {
@@ -19,43 +20,16 @@ class Enemy extends Entity {
         setTimeout(() => { this.setSkin(container, i == 0 ? 1 : 0) }, i == 0 ? 1500 : 750);
     }
 
-    walk(direction = 'right') {
-        const collision = super.walk(direction, 2)
-        if (collision == true) direction = direction == 'left' ? 'right' : 'left'
-        requestAnimationFrame(() => {this.walk(direction); super.applyGravity()})
+    walk() {
+        const collision = super.walk(this.direction, 2)
+        if (collision == true) this.direction = this.direction == 'left' ? 'right' : 'left'
+
+
     }
 
-    // walk() {
-    //     if (this.speed == 0) this.speed = 1
-    //     while (1) {
-    //         const checkCollision = this.checkCollision()
-
-    //         if (!checkCollision) break
-
-    //         this.speed *= -1
-    //     }
-
-    //     super.setX(super.getPosition().x + this.speed)
-
-    //     requestAnimationFrame(() => this.walk())
-    // }
-
-    // checkCollision(start = false) {
-    //     if (super.getPosition().x + this.speed < 0 || super.getPosition().x + this.speed > 800 - this.width) return true
-    //     for (const plataform of this.plataforms) {
-
-    //         if (
-    //             !start &&
-    //             this.y + this.height == plataform.y &&
-    //             (super.getPosition().x + this.speed < plataform.x || super.getPosition().x + this.width + this.speed > plataform.x + plataform.width)
-    //         ) return true
-
-    //         if (this.y + this.height > plataform.y && this.y < plataform.y + plataform.height) {
-    //             if (
-    //                 (this.speed > 0 && plataform.x < super.getPosition().x + this.width + this.speed && plataform.x + plataform.width > super.getPosition().x) ||
-    //                 (this.speed < 0 && super.getPosition().x + this.speed < plataform.x + plataform.width && super.getPosition().x + this.width > plataform.x)
-    //             ) return true
-    //         }
-    //     }
-    // }
+    start() {
+        this.walk(this.direction)
+        super.gravity()
+        requestAnimationFrame(() => this.start())
+    }
 }

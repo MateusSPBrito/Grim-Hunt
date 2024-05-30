@@ -3,6 +3,7 @@ class Entity {
         this.x = x;
         this.y = 400 - size - y;
         this.speedX = 0
+        this.speedY = 0
         this.element
         this.width = size
         this.height = size
@@ -34,8 +35,31 @@ class Entity {
         }
     }
 
-    gravity(){
+    gravity() {
+        const { collision, y } = this.checkVerticalCollision(this.y + this.speedY)
+        if (collision) {
+            this.y = y
+            this.speedY = 0
+        }
+        else this.y += this.speedY
+        this.element.style.top = `${this.y}px`
+        this.speedY += 0.2
+    }
 
+    checkVerticalCollision(nextPosition) {
+        const maxY = 400 - this.height
+        if (nextPosition >= 400 - this.height) return { collision: true, y: maxY }
+
+        for (const plataform of this.plataforms) {
+            if ((this.height + nextPosition > plataform.y && nextPosition < plataform.y + plataform.height) &&
+                plataform.x < this.x + this.width + this.speedX &&
+                plataform.x + plataform.width > this.x &&
+                this.x + this.speedX < plataform.x + plataform.width &&
+                this.x + this.width > plataform.x)
+                return { collision: true, y: plataform.y - this.height }
+        }
+
+        return { collision: false }
     }
 
     walk(direction, speed) {
@@ -56,7 +80,6 @@ class Entity {
             if (!(this.y + this.height > plataform.y && this.y < plataform.y + plataform.height)) continue
 
             if (nextPosition > plataform.x - this.width && nextPosition < plataform.x + plataform.width) {
-                console.log(nextPosition, plataform)
                 if (direction == 'left') return { collision: true, x: plataform.x + plataform.width }
                 return { collision: true, x: plataform.x - this.width }
 
