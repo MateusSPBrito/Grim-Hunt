@@ -38,17 +38,25 @@ class Entity {
     gravity() {
         const { collision, y } = this.checkVerticalCollision(this.y + this.speedY)
         if (collision) {
-            this.y = y
             this.speedY = 0
+            if (collision === 'bottom') this.y = y
         }
+
         else this.y += this.speedY
         this.element.style.top = `${this.y}px`
         this.speedY += 0.2
+
+        let status
+        if (Math.trunc(this.speedY) > 0) status = 'falling'
+        else if (Math.trunc(this.speedY) < 0) status = 'rising'
+        else if (collision === 'bottom') status = 'OnGround'
+
+        return { collision, status }
     }
 
     checkVerticalCollision(nextPosition) {
         const maxY = 400 - this.height
-        if (nextPosition >= 400 - this.height) return { collision: true, y: maxY }
+        if (nextPosition >= 400 - this.height) return { collision: 'bottom', y: maxY }
 
         for (const plataform of this.plataforms) {
             if ((this.height + nextPosition > plataform.y && nextPosition < plataform.y + plataform.height) &&
@@ -56,7 +64,10 @@ class Entity {
                 plataform.x + plataform.width > this.x &&
                 this.x + this.speedX < plataform.x + plataform.width &&
                 this.x + this.width > plataform.x)
-                return { collision: true, y: plataform.y - this.height }
+                return {
+                    collision: nextPosition > plataform.y ? 'top' : 'bottom',
+                    y: plataform.y - this.height
+                }
         }
 
         return { collision: false }

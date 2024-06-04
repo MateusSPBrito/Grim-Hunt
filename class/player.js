@@ -1,16 +1,9 @@
 class Player extends Entity {
     constructor(container, plataforms) {
-        super(350, 350, 50, container)
-        this.x = 350;
-        this.y = 350;
-        this.speed = 0;
-        this.jumpSpeed = 0;
+        super(350, 350, 50, container, plataforms)
         this.jumpsRemaining = 2;
-        this.actions = { left: false, right: false, jump: false };
-        this.element
-        this.width = 50
-        this.height = 50
-        this.plataforms = plataforms
+        this.actions = { left: false, right: false, jump: false }
+        this.statusY
 
         super.createEntity(container)
         this.createListener()
@@ -22,25 +15,20 @@ class Player extends Entity {
             switch (event.key) {
 
                 case 'ArrowUp':
-                    if (this.jumpsRemaining > 0) {
-                        this.jumpsRemaining--
-                        this.actions.jump = true
-                        this.jumpSpeed = -5
-                        this.setSkin()
-                    }
-                    break;
+                    this.jump()
+                    break
 
                 case 'ArrowLeft':
                     if (this.actions.left) break
                     this.actions.left = true
                     this.setSkin()
-                    break;
+                    break
 
                 case 'ArrowRight':
                     if (this.actions.right) break
                     this.actions.right = true
                     this.setSkin()
-                    break;
+                    break
             }
         });
 
@@ -57,7 +45,7 @@ class Player extends Entity {
             }
         });
 
-        this.commands()
+        this.start()
     }
 
     setSkin(i = 0, oldAction = null) {
@@ -74,10 +62,10 @@ class Player extends Entity {
         let frame
         let action
 
-        if (this.actions.jump) {
+        if (this.statusY !== 'OnGround') {
             action = 'jump'
 
-            if (this.jumpSpeed < 0) {
+            if (this.speedY < 0) {
                 if (this.actions.left && !this.actions.right) frame = riseLeft
                 else if (!this.actions.left && this.actions.right) frame = riseRight
                 else frame = rise
@@ -101,84 +89,35 @@ class Player extends Entity {
     }
 
     walk() {
-        this.speed = 0
-        if (this.actions.left && !this.actions.right) this.speed = -3;
-        else if (this.actions.right && !this.actions.left) this.speed = 3;
-
-        while (1) {
-            const command = this.speed < 0 ? 'left' : this.speed > 0 ? 'right' : null
-            const checkCollision = command === null ? false : this.checkCollision(command)
-
-            if (!checkCollision) break
-
-            if (this.speed < 0) this.speed += 1
-            else if (this.speed > 0) this.speed -= 1
-            else break
-        }
-
-        this.x += this.speed;
-        this.element.style.left = `${this.x}px`
+        if (this.actions.left === this.actions.right) return
+        let direction = this.actions.left ? 'left' : 'right'
+        super.walk(direction, 3)
     }
 
     jump() {
-        const checkCollision = this.checkCollision()
-        const oldJumpSpeed = this.jumpSpeed
-
-        if (!checkCollision) {
-            this.y += this.jumpSpeed
-            this.jumpSpeed += 0.2
-            this.element.style.top = `${this.y}px`
+        if (this.jumpsRemaining > 0) {
+            this.speedY += -5
+            if (this.speedY < -5) this.speedY = -5
+            this.jumpsRemaining--
+            this.actions.jump = true
+            this.setSkin()
         }
+    }
 
-        else if (this.jumpSpeed > 0) { //caindo
-            this.y = checkCollision.y - this.height
-            this.jumpSpeed = 0
+    start() {
+        const { collision, status } = super.gravity()
+
+        if (collision === 'bottom' && this.actions.jump) {
             this.actions.jump = false
             this.jumpsRemaining = 2
-            this.element.style.top = `${this.y}px`
-        }
-        else if (this.jumpSpeed < 0) { // subindo
-            this.jumpSpeed = 0
-            this.y = checkCollision.y + checkCollision.height
-            this.element.style.top = `${this.y}px`
         }
 
-        if (oldJumpSpeed < 0 && this.jumpSpeed >= 0) this.setSkin()
-        else if (oldJumpSpeed > 0 && this.jumpSpeed === 0 && oldJumpSpeed - this.jumpSpeed > 0.5)
+        if (status && status !== this.statusY) {
+            this.statusY = status
             this.setSkin()
-
-    }
-
-    checkCollision(command = 'jump') {
-        if (command != 'jump' && (this.x + this.speed < 0 || this.x + this.speed > 800 - this.width)) return true
-
-        if (command == 'jump' && this.y + this.jumpSpeed >= 350) return { height: 0, y: 400 }
-
-        for (const plataform of this.plataforms) {
-            if (command != 'jump' &&
-                (this.y + this.height > plataform.y && this.y < plataform.y + plataform.height)
-            ) {
-                if (command == 'right' && plataform.x < this.x + this.width + this.speed &&
-                    plataform.x + plataform.width > this.x) return true
-
-                if (command == 'left' && this.x + this.speed < plataform.x + plataform.width &&
-                    this.x + this.width > plataform.x) return true
-            }
-            else if (command == 'jump' &&
-                (this.y + this.height + this.jumpSpeed > plataform.y && this.y + this.jumpSpeed < plataform.y + plataform.height) &&
-                plataform.x < this.x + this.width + this.speed &&
-                plataform.x + plataform.width > this.x &&
-                this.x + this.speed < plataform.x + plataform.width &&
-                this.x + this.width > plataform.x
-            ) return { height: plataform.height, y: plataform.y }
         }
 
-        return false
-    }
-
-    commands() {
         this.walk()
-        this.jump()
-        requestAnimationFrame(() => this.commands())
+        requestAnimationFrame(() => this.start())
     }
 }

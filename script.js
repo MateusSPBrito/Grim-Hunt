@@ -6,9 +6,9 @@ const plataforms = [
 ]
 
 const enemys = [
-    new Skull(200, 0, 65, container, plataforms),
-    new Skull(700, 0, 65, container, plataforms),
-    new Skull(250, 120, 65, container, plataforms),
+    // new Skull(200, 0, 65, container, plataforms),
+    // new Skull(700, 0, 65, container, plataforms),
+    // new Skull(250, 120, 65, container, plataforms),
 ]
 
 const player = new Player(container, plataforms)
