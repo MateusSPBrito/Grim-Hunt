@@ -5,7 +5,7 @@ class Player extends Entity {
         this.actions = { left: false, right: false, jump: false }
         this.statusY
 
-        super.createEntity(container)
+        super.createEntity(container.element)
         this.createListener()
         this.setSkin()
     }
@@ -104,6 +104,19 @@ class Player extends Entity {
         }
     }
 
+    updateCamera() {
+        const windowWidth = window.innerWidth;
+
+        if (windowWidth * 0.9 < this.container.width) {
+
+            if (this.x < windowWidth / 5 || this.container.width - this.x < windowWidth / 5) return
+
+            const leftDistance = (windowWidth / 2) - this.x
+
+            this.container.element.style.left = `${leftDistance}px`
+        }
+    }
+
     start() {
         const { collision, status } = super.gravity()
 
@@ -118,6 +131,7 @@ class Player extends Entity {
         }
 
         this.walk()
+        this.updateCamera()
         requestAnimationFrame(() => this.start())
     }
 }

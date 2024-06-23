@@ -9,12 +9,11 @@ html {
     align-items: center;
     background-color: #000;
     height: 100vh;
+    overflow: hidden;
 }
 
 #container {
-    position: relative;
-    width: 800px;
-    height: 400px;
+    position: absolute;
     background-color: #894b4b;
     overflow: hidden;
 }

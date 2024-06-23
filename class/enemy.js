@@ -3,17 +3,17 @@ class Enemy extends Entity {
         super(x, y, 60, container, plataforms)
         this.direction = 'right'
 
-        super.createEntity(container)
-        this.setSkin(container)
+        super.createEntity(container.element)
+        this.setSkin()
         this.start()
     }
 
-    setSkin(container, i = 0) {
+    setSkin(i = 0) {
         const frame = stopSkull[i]
 
         super.setSkin(frame)
 
-        setTimeout(() => { this.setSkin(container, i == 0 ? 1 : 0) }, i == 0 ? 1500 : 750);
+        setTimeout(() => { this.setSkin(i == 0 ? 1 : 0) }, i == 0 ? 1500 : 750);
     }
 
     walk() {

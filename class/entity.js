@@ -1,5 +1,6 @@
 class Entity {
     constructor(x, y, size, container, plataforms) {
+        this.container = container
         this.x = x;
         this.y = 400 - size - y;
         this.speedX = 0
@@ -55,8 +56,9 @@ class Entity {
     }
 
     checkVerticalCollision(nextPosition) {
-        const maxY = 400 - this.height
-        if (nextPosition >= 400 - this.height) return { collision: 'bottom', y: maxY }
+        const maxY = this.container.height - this.height
+        if (nextPosition >= this.container.height - this.height) return { collision: 'bottom', y: maxY }
+        if (nextPosition <= 0) return { collision: 'top', y: 0 }
 
         for (const plataform of this.plataforms) {
             if ((this.height + nextPosition > plataform.y && nextPosition < plataform.y + plataform.height) &&
@@ -85,7 +87,8 @@ class Entity {
         const nextPosition = this.x + (direction == 'right' ? speed : -speed)
 
         if (nextPosition < 0) return { collision: true, x: 0 }
-        if (nextPosition > 800 - this.width) return { collision: true, x: 800 - this.width }
+        if (nextPosition > this.container.width - this.width)
+            return { collision: true, x: this.container.width - this.width }
 
         for (const plataform of this.plataforms) {
             if (!(this.y + this.height > plataform.y && this.y < plataform.y + plataform.height)) continue
