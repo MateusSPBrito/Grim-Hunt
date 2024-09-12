@@ -1,23 +1,24 @@
 class Entity {
-    constructor(x, y, size, container, plataforms) {
+    constructor(x, y, width, height, container, plataforms) {
         this.container = container
-        this.x = x;
-        this.y = 400 - size - y;
+        this.x = x
+        this.y = container.height - height - y
         this.speedX = 0
         this.speedY = 0
         this.element
-        this.width = size
-        this.height = size
+        this.width = width
+        this.height = height
         this.plataforms = plataforms
     }
 
-    createEntity(container) {
+    createEntity(container, color = null) {
         this.element = document.createElement('div');
         this.element.classList = 'entity';
         this.element.style.left = `${this.x}px`;
         this.element.style.top = `${this.y}px`;
         this.element.style.width = `${this.width}px`
         this.element.style.height = `${this.height}px`
+        if (color) this.element.style.backgroundColor = `${color}`
         container.appendChild(this.element);
     }
 
@@ -75,7 +76,7 @@ class Entity {
         return { collision: false }
     }
 
-    walk(direction, speed) {
+    walk(direction, speed) { 
         const { collision, x } = this.checkHorizontalCollision(direction, speed)
         if (collision) this.x = x
         else this.x += direction == 'right' ? speed : -speed

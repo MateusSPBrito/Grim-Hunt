@@ -1,6 +1,6 @@
 class Enemy extends Entity {
-    constructor(x, y, size, container, plataforms) {
-        super(x, y, 60, container, plataforms)
+    constructor(x, y, width, height, container, plataforms) {
+        super(x, y, width, height, container, plataforms)
         this.direction = 'right'
 
         super.createEntity(container.element)

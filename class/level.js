@@ -1,7 +1,7 @@
 class Level {
     constructor(container) {
         this.container = container
-        this.width = 1536
+        this.width = 1500
         this.height = 400
         this.plataforms = this.generatePlataforms()
         this.player = new Player({ element: container, width: this.width, height: this.height }, this.plataforms)
@@ -27,9 +27,9 @@ class Level {
     generateEnemies() {
         const parameters = [{ element: container, width: this.width, height: this.height }, this.plataforms]
         return [
-            new Skull(200, 0, 65, ...parameters),
-            new Skull(700, 0, 65, ...parameters),
-            new Skull(250, 120, 65, ...parameters),
+            new Skull(200, 0, 65, 65, ...parameters),
+            new Skull(700, 0, 65, 65, ...parameters),
+            new Skull(250, 120, 65, 65, ...parameters),
         ]
     }
 }

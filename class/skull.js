@@ -1,5 +1,5 @@
 class Skull extends Enemy {
-    constructor(x, y, size, container, plataforms) {
-        super(x, y, size, container, plataforms)
+    constructor(x, y, width, height, container, plataforms) {
+        super(x, y, width, height, container, plataforms)
     }
 }

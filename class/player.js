@@ -1,16 +1,16 @@
 class Player extends Entity {
     constructor(container, plataforms) {
-        super(350, 350, 50, container, plataforms)
+        super(350, 0, 50, 50, container, plataforms)
         this.jumpsRemaining = 2;
         this.actions = { left: false, right: false, jump: false }
         this.statusY
 
         super.createEntity(container.element)
-        this.createListener()
+        this.createListener(container)
         this.setSkin()
     }
 
-    createListener() {
+    createListener(container) {
         document.addEventListener('keydown', (event) => {
             switch (event.key) {
 
@@ -29,6 +29,11 @@ class Player extends Entity {
                     this.actions.right = true
                     this.setSkin()
                     break
+
+                case ' ':
+                    if (this.actions.left === this.actions.right) return
+                    let direction = this.actions.left ? 'left' : 'right'
+                    new Bullet(this.x, container.height - this.y - this.height / 2, direction, container)
             }
         });
 
