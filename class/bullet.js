@@ -1,8 +1,8 @@
 class Bullet extends Entity {
-    constructor(x, y, direction, container) {
-        super(x, y, 15, 3, container, [])
+    constructor(x, y, direction, container, enemies, platforms) {
+        super(x, y, 15, 3, container, platforms)
         super.createEntity(container.element, '#fff')
-        this.speed = 5
+        this.speed = 10
         this.action(direction, true)
     }
 
@@ -23,10 +23,6 @@ class Bullet extends Entity {
 
     destroy() {
         this.element.remove()
-        for (let prop in this) {
-            if (this.hasOwnProperty(prop)) {
-                delete this[prop]
-            }
-        }
+        Object.keys(this).forEach(prop => delete this[prop]);
     }
 }

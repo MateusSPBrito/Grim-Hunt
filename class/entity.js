@@ -76,7 +76,7 @@ class Entity {
         return { collision: false }
     }
 
-    walk(direction, speed) { 
+    walk(direction, speed) {
         const { collision, x } = this.checkHorizontalCollision(direction, speed)
         if (collision) this.x = x
         else this.x += direction == 'right' ? speed : -speed

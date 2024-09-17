@@ -5,7 +5,7 @@ class Player extends Entity {
         this.actions = { left: false, right: false, jump: false }
         this.statusY
 
-        this.loadedGun = true
+        this.loadedGun = { timeLoaded: true, btnAtk: true }
 
         super.createEntity(container.element)
         this.createListener(container)
@@ -47,6 +47,8 @@ class Player extends Entity {
                     this.actions.right = false
                     this.setSkin()
                     break
+                case ' ':
+                    this.loadedGun.btnAtk = true
             }
         });
 
@@ -110,14 +112,18 @@ class Player extends Entity {
     }
 
     shoot(container) {
-        if (!this.loadedGun) return
+        if (!this.loadedGun.timeLoaded || !this.loadedGun.btnAtk) return
         if (this.actions.left === this.actions.right) return
 
-        this.loadedGun = false
-        setTimeout(() => { this.loadedGun = true }, 500)
+        this.loadedGun.btnAtk = false
+        this.loadedGun.timeLoaded = false
+        setTimeout(() => { this.loadedGun.timeLoaded = true }, 500)
 
         let direction = this.actions.left ? 'left' : 'right'
-        new Bullet(this.x, container.height - this.y - this.height / 2, direction, container)
+        let platforms = level.plataforms
+        let enemies = level.enemies
+
+        new Bullet(this.x, container.height - this.y - this.height / 2, direction, container, enemies, platforms)
     }
 
     updateCamera() {
