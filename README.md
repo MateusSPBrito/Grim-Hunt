@@ -20,11 +20,14 @@ Este é um projeto criado para treinar lógica de programação e praticar conce
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 
+## 🎨 Arte
+A arte dos personagens e inimigos foi gerada utilizando um projeto desenvolvido por mim chamado Pixel. O Pixel permite criar arte pixelada personalizada ao pintar pixels individualmente, escolhendo cores e desenhando diretamente em uma área de trabalho. O desenho gerado é convertido em um array de dados, que é então usado no jogo para exibir a arte.
+
 ## ▶️ Como Jogar
 1. Acesse o jogo diretamente pelo link abaixo:
 🔗 [Jogar agora](https://mateusspbrito.github.io/platform_game/)
 
-2. Movimentação: Use as setas do teclado para mover o personagem.
+2. Movimentação: Use as setas do teclado (↑, ↓, ←, →) para mover o personagem.
 
 3. Atirar: Pressione a tecla Espaço para atirar.
 
