@@ -34,3 +34,12 @@ A arte dos personagens e inimigos foi gerada utilizando um projeto desenvolvido 
 ## 📌 Contribuições
 O projeto está em desenvolvimento, mas feedbacks e sugestões são bem-vindos!
 
+📩 **Contato**: 
+<p align="start">
+    <a href="mailto:mateus.s.p.brito2001@gmail.com">
+        <img aut="gmail" title="gmail" src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white"/>
+    </a>
+    <a href="https://www.linkedin.com/in/mateus-brito-4aa977264/">
+        <img aut="linkedin" title="linkedin" src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/>
+    </a>
+</p>
