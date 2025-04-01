@@ -34,6 +34,8 @@ A arte dos personagens e inimigos foi gerada utilizando um projeto desenvolvido 
 ## 📌 Contribuições
 O projeto está em desenvolvimento, mas feedbacks e sugestões são bem-vindos!
 
+---
+
 📩 **Contato**: 
 <p align="start">
     <a href="mailto:mateus.s.p.brito2001@gmail.com">
