@@ -25,7 +25,7 @@ A arte dos personagens e inimigos foi gerada utilizando um projeto desenvolvido 
 
 ## ▶️ Como Jogar
 1. Acesse o jogo diretamente pelo link abaixo:
-🔗 [Jogar agora](https://mateusspbrito.github.io/platform_game/)
+🔗 [Jogar agora](https://mateusspbrito.github.io/Grim-Hunt/)
 
 2. Movimentação: Use as setas do teclado (↑, ↓, ←, →) para mover o personagem.
 
